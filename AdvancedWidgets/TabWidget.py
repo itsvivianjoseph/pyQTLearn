@@ -97,6 +97,7 @@ class NestInfoDialog(QDialog):
         if ans == QMessageBox.Yes:
             self.tabWidget.removeTab(idx)
 
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     nest_info_dialog = NestInfoDialog()
