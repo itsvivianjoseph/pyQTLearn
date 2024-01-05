@@ -1,7 +1,8 @@
 import random
 import sys
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QDialog, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QMessageBox
+from PyQt5.QtWidgets import QApplication, QDialog, QTreeWidget, QTreeWidgetItem, QVBoxLayout, QMessageBox, QComboBox, \
+    QLineEdit, QPushButton
 
 
 class MyDialog(QDialog):
@@ -29,9 +30,26 @@ class MyDialog(QDialog):
 
         self.tree_widget.itemDoubleClicked.connect(self.evt_handler_double_clicked)
 
+        # combo-box
+        self.combo_box = QComboBox()
+        list_classes = get_all_items(self.tree_widget)
+        list_classes.sort()
+        for clas in list_classes:
+            self.combo_box.addItem(clas.text(0))
+
+        # line-edit for entering a new class to the hierarchy
+        self.line_edit = QLineEdit("Q")
+
+        # button
+        self.button_add_class = QPushButton("Add the class to the hierarchy")
+        self.button_add_class.clicked.connect(self.evt_handler_add_class)
+
         # Main layout
         self.main_layout = QVBoxLayout()
         self.main_layout.addWidget(self.tree_widget)
+        self.main_layout.addWidget(self.combo_box)
+        self.main_layout.addWidget(self.line_edit)
+        self.main_layout.addWidget(self.button_add_class)
 
         # Setup layout
         self.setLayout(self.main_layout)
@@ -66,6 +84,32 @@ class MyDialog(QDialog):
     # Event handlers
     def evt_handler_double_clicked(self, twi, col):
         QMessageBox.information(self, "Qt Classes", "You chose the {}".format(twi.text(col)))
+
+    def evt_handler_add_class(self):
+        ans = QMessageBox.question(self,"Add Class","Are you sure that you want to add {} to {}".format(self.line_edit.text(), self.combo_box.currentText()))
+        if ans == QMessageBox.Yes:
+            tree_widget_item = self.tree_widget.findItems(self.combo_box.currentText(), Qt.MatchRecursive)[0]
+            tree_widget_item.addChild(QTreeWidgetItem([self.line_edit.text(), str(random.randrange(25)), str(random.randrange(8))]))
+
+
+def get_all_items(tree_widget):
+    all_items = []
+
+    # Loop over top-level items
+    for i in range(tree_widget.topLevelItemCount()):
+        top_item = tree_widget.topLevelItem(i)
+        stack = [top_item]
+
+        # Process items in a depth-first manner
+        while stack:
+            current_item = stack.pop()
+            all_items.append(current_item)
+
+            # Separate for-loop for extending the stack with child items
+            for j in range(current_item.childCount()):
+                stack.append(current_item.child(j))
+
+    return all_items
 
 
 if __name__ == "__main__":
