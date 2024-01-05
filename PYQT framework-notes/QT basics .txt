@@ -1,0 +1,53 @@
+QT Basics:
+
+- Framework for creating GUI.
+- Platform-independent.
+- QTCreator IDE is commonly used for QT development.
+- SIP creates Python bindings for C++ (QT) classes.
+- QTDesigner provides a visual interface for design.
+- Pyuic5 and pyQT5 are tools for working with QT UI files.
+- Signals and slots in QT correspond to events and event handlers.
+
+QT Framework:
+
+- Use Qt Designer to build UI.
+- Save the UI design as a .ui file.
+- Convert the .ui file to a .py file using Pyuic5.
+- Write event handlers in Python.
+- Events in QT are referred to as signals.
+- Event handlers in QT are known as slots.
+- All QT widgets have predefined signals they emit.
+- Custom signals can be created.
+
+First Program :
+
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QMainWindow
+
+app = QApplication(sys.argv)
+dlgMain = QWidget()  # Choose the appropriate type: QWidget, QDialog, QMainWindow
+dlgMain.setWindowTitle("My GUI")  # Customization
+dlgMain.show()  # Display the GUI
+app.exec_()  # Execute the application
+
+# When exiting, generates either a 0 or another code:
+# - 0: Normal exit
+# - Any other code: Indicates an error related to the exit
+
+
+First program in object oriented approach :
+
+import sys
+from PyQt5.QtWidgets import QApplication, QDialog
+
+class DlgMain(QDialog):
+    def __init__(self):
+        super().__init__()
+        # Customization
+        self.setWindowTitle("My GUI")
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    dlgMain = DlgMain()
+    dlgMain.show()
+    sys.exit(app.exec_())

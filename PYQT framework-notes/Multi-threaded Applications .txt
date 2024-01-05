@@ -1,0 +1,13 @@
+Multi-threaded Applications :
+- threads are an independent set of instructions
+	- independent means that they cant interact with each other by normal means
+- OS dependent
+- Qt provides a platform independent method for using threads
+	- QThread class
+		- create a worker class that is a subclass of Qthread
+		- override the run method in the worker class
+		- in you main application create an instance of the worker class
+		- call the instances start() method to begin the worker classes run method
+		- communicate between main thread and worker thread using signals
+			- worker thread has a finished signal that is emitted when the run method finishes
+			- you can implement your own custom signals in the worker class to communicate with the main thread

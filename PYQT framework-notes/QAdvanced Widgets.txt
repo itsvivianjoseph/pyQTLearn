@@ -1,0 +1,95 @@
+QAdvanced Widgets:
+
+QTabWidget:
+- Methods: `addTab(QWidget, label)`, `addTab(QWidget, QIcon, label)`.
+- Additional methods: `insertTab(idx, QWidget, label)`, `setMovable(bool)`, `setTabsCloseable(bool)`.
+- Methods to manage tabs: `setTabText(idx, label)`, `setTabPosition(QTabWidget.TabPosition)`, `setTabShape(QTabWidget.TabShape)`.
+- Signals: `currentChanged(idx)`, `tabBarClicked(idx)`, `tabBarDoubleClicked(idx)`.
+
+QListWidget:
+- Inheritance hierarchy: `QWidget` > `QFrame` > `QAbstractScrollArea` > `QAbstractItemView` > `QListView` > `QListWidget`.
+- Methods: `addItem(txt)`, `addItems(list)`, `insertItem(idx, txt)`.
+- Additional methods: `setCurrentRow(idx)`, `sortItems(Qt.SortOrder)`.
+- Signals: `currentRowChanged(int)`, `currentTextChanged(txt)`, `itemSelectionChanged()`.
+
+QListWidgetItem:
+- Methods: `setText(str)`, `setIcon(QIcon)`, `setFont`, `setData`, `setToolTip` (appears when hovering over an item).
+- Additional methods: `setCheckState`, `setSelected`, `setHidden`.
+- Used in QListWidget methods and signals.
+
+QTreeWidget:
+- Used for nested lists or data trees.
+- `QTreeWidgetItem` is used with parent, list of strings, and type.
+- Methods: `addChild(QTreeWidgetItem)`, `addChilder([QTreeWidgetItem])`, `setText(col, str)`, `setExpanded(bool)`.
+
+QTreeWidget:
+- Methods: `addTopLevelItem(QTWI)`, `addTopLevelItems([QTWIs])`, `insertTopLevelItem(idx, QTWI)`.
+- Additional methods: `findItems(str, Qt.MatchFlags, col)`, `sortItems(col, Qt.SortOrder)`, `topLevelItemCount()`.
+
+QPlainTextEdit:
+- Inheritance hierarchy: `QWidget` > `QFrame` > `QAbstractScrollArea` > `QPlainTextEdit`.
+- Methods: `setPlainText(str)`, `insertPlainText(str)`, `appendPlainText(str)`.
+- Signals: `cursorPositionChanged()`, `selectionChanged()`, `textChanged()`.
+
+QTextEdit:
+- Rich text format support (HTML, Markdown).
+- Methods: `setTextCursor(QTextCursor)`, `setHTML(str)`, `setMarkdown(str)`, `setPlainText(str)`.
+- Additional methods: `insertHTML(str)`, `insertPlainText(str)`, `append(str)`.
+- Conversion methods: `toHtml()`, `toMarkdown()`, `toPlainText()`.
+
+QTextBrowser:
+- Inherits from QTextEdit.
+- Read-only mode with limited HTML tags.
+- Methods: `setSource(QURL)`, `backward()`, `forward()`, `home()`, `clearHistory()`, `reload()`.
+
+QWebEngineView:
+- Requires separate installation (`pip install PyQtWebEngine`).
+- Methods: `setHtml(str)`, `setUrl(QUrl)`, `back()`, `forward()`, `history()`.
+- Signals: `itemChanged(QTWI, col)`, `itemClicked(QTWI)`, `itemDoubleClicked(QTWI)`.
+
+QTableWidget:
+- Inheritance hierarchy: `QWidget` > `QFrame` > `QAbstractScrollArea` > `QAbstractItemView` > `QTableView` > `QTableWidget`.
+- Methods: `QTableWidget(rows, columns, parent)`, `insertColumn(col)`, `insertRow(row)`, `removeColumn(col)`.
+- Signals: `cellChanged(row, col)`, `cellClicked(row, col)`, `itemSelectionChanged()`.
+
+QTableWidgetItem:
+- Methods: `QTableWidgetItem(type)`, `QTableWidgetItem(str, type)`, `QTableWidgetItem(QIcon, str, type)`.
+- Additional methods: `setText(str)`, `setIcon(QIcon)`, `setData(var)`, `setCheckedState(bool)`.
+- Used in QTableWidget methods and signals.
+
+QGroupBox:
+- Used for organization.
+- Methods: `QGroupBox(title, parent)`, `setTitle(str)`, `setCheckable(bool)`, `setChecked(bool)`.
+- Additional methods: `setFlag(bool)`, `setAlignment(Qt.Alignment)`.
+- Signals: `clicked(bool)`, `toggled(bool)`.
+
+QLCDNumber:
+- Displays a number.
+- Methods: `QLCDNumber(int, parent)`, `QLCDNumber(parent)`.
+- Additional methods: `intValue()`, `value()`, `display(int)`.
+- Conversion methods: `setHex()`, `setDec()`, `setOct()`.
+
+QSlider, QDial:
+- Inheritance hierarchy: `QAbstractSlider` > `QSlider`, `QDial`.
+- Common methods: `setMinimum(int)`, `setMaximum(int)`, `setRange(min, max)`, `setValue(int)`.
+- Additional methods: `setOrientation(Qt.Orientation)`.
+- Signals: `sliderMoved(int)`, `valueChanged(int)`.
+- `QSlider` specific: `setTickInterval(int)`, `setTickPosition(QSlider.TickPosition)`.
+- `QDial` specific: `setNotchTarget(dbl)`, `setNotchesVisible(bool)`, `setWrapping(bool)`.
+
+QProgressBar:
+- Inherits from `QWidget`.
+- Methods: `setValue(int)`, `setMinimum(int)`, `setMaximum(int)`, `setRange(min, max)`.
+- Additional methods: `setOrientation(Qt.Orientation)`, `setTextVisible(bool)`, `setTextDirection(...)`.
+- Signals: `valueChanged(int)`.
+
+QTimer:
+- Part of `Qt.core`, non-visual.
+- Methods: `start(msec)`, `stop()`, `setSingleShot(bool)`, `setInterval(msec)`, `setTimeType(Qt.TimeType)`.
+- Signals: `timeout()`.
+
+Steps in QTimer:
+1. Create a timer.
+2. Start the timer.
+3. Handle the timeout signal.
+4. Stop the timer.
