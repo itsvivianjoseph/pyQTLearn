@@ -1,0 +1,136 @@
+Qt Style Sheets :
+
+- setStyleSheet(str) - QApplication and QWidget
+- similar to CSS
+
+syntax :
+ selector {
+	property1 : value1;
+	property2 : value2;
+    }
+
+- selectors
+	- class name
+		- apply to all elements in a class
+	- className#variableName 
+		- apply to a specific instace of class
+	- className:state 
+		- apply to a specific state
+	- className::subcontrol
+		- apply to specific sub-controls. up-arrow,..etc
+	- className[property = value]
+		- apply to all elements that satisfy the property condition
+	- className1, className2 
+		- apply to all elements of className2 that are children of className1
+	- className1 , className2
+		- apply to both className1 and className 2
+
+-properties - standard
+	- color - text color: red
+	- background-color : #FF0000
+	- background-image: url(:photos/bear.jpg)
+	- border: width style color
+		- corder: 2px dashed rgb(255,0,0)
+	- border-radius: 5px
+	- font: bold italic large "Times New Roman"
+	- height: 10px
+	- width: 50px
+	- lineedit-password-character: 9679
+	- margin, padding
+		- Qt Box Model
+			- margin	
+			- border
+			- padding
+			- content
+- text-align
+
+
+
+Qt styleSheets - widgets
+- QPushButton
+	- states,
+		- :hover
+		- :default
+		- :pressed
+		- :flat
+- QCheckBox, QRadioButton
+	- subcontrol ,
+		- ::indicator
+		- states,
+			- :checked
+			- :unchecked
+			- :indeterminate
+- QComboBox
+	- subcontrols,
+		- ::drop-down
+		- ::down-arrow
+	- states,
+		- :editable
+		- :on
+- QGroupBox
+	- subcontrols,
+		- ::title
+		- ::indicator
+	- states
+		- :checked
+		- :unchecked
+
+- QLineEdit
+	- states,
+		- :read-only
+- QListWidget
+	- subcontrol, 
+		- ::item
+	- state, 
+		- :alternate
+		- :selected
+		- :hover
+
+- QSlider
+	- subcontrols,	
+		- ::groove
+		- ::handle
+	- states,	
+		- :vertical
+		- :horizontal
+- QSpinBox
+	- subcontrols,
+		- ::up-button
+		- ::up-arrow	
+		- ::down-button
+		- ::down-arrow
+	- states,	
+		- :hover
+		- :pressed
+		- :disabled
+
+QStyleFactory:
+- applied to the entire application
+- two static methods,
+	- returns a list of valid styles on your system
+- QStyleFactory.create(key)
+	- returns a QStyle obj that can be used with the setStyle(Qstyle) method
+	- can be used with QApplication or QWidget objs
+
+
+Using Style Functions:	
+- No Class functionality
+- issues
+	- lots of redundant code
+	- prone to errors
+	- difficult to debug
+- setStyleSheet(str) -> setStyleSheet(styleDeleteButton())
+	eg:
+		def styleDeleteButton():
+			sStyle = "background-color: red"
+			return sStyle
+
+
+Dark-Mode: 
+- install QDarkStyle using pip
+- import QDarkStyle
+- app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+- ISSUE : settign style sheets elsewhere may cause problems
+- SOULTION : create a dark property and make style function return value dependent on its value
+
+

@@ -1,0 +1,46 @@
+QtSql :
+- types of DS's :
+	- file based :
+		- SQlite
+	- server based
+		- MySQL, PostgreSQL ,SQLServer, Oracle ,DB2
+		- listen for requests on a specific port and specific host
+		- handle user auth
+		- accessible over the internet
+
+- QSql Database :
+	- provides connection to a SQL database
+- QSql Query :
+	- provides methods for submitting  SQL statements to the database and retrieving results
+
+QSql Database: 
+- provides methods for connecting to a DB
+- static methods
+	- drivers()
+	- addDataBase(driver, conName)
+- methods
+	- setDatabaseName(dbname)
+	- setHostName(hostname)
+	- setPort(port)
+	- setUserName(username)
+	- setPassword(password)
+	- open() - returns true if successfull, false if not
+
+
+QSqlQuery: 
+- provides methods fro submitting an SQL query to the DB 
+	- query = QSqlQuery(db)
+	- simple queries 
+		- bRes = query.exec("SELECT * FROM employees")
+	- parameterized queries
+		-query.prepare(insert into employees (emp_id, fname,lname) values ("id, :fn,:ln))
+		-query.bindValue(":id",101)
+		-query.bindValue(":fn","fred")
+		-query.bindValue(":ln","andrew")
+		-bRes = query.exec()
+
+- handling results
+	- lastError() - returns the last error as QSqlError
+	- next() - moves the cursor to the next record. return T or F
+	- value(n) - returns the value of the Nth field
+	- value("fieldaname") - returns the value of the specified fields

@@ -1,0 +1,27 @@
+Layouts:
+- Absolute Positioning:
+  - Requires a lot of work.
+  - Not elastic; not responsive.
+
+- Layouts:
+  - `QLayouts` is an abstract class.
+  - Common methods: `addWidget()`, `removeWidget()`, `count()`, `setAlignment()`, `setEnabled(bool)`.
+
+- QBoxLayout:
+  - `QVBoxLayout()`, `QHBoxLayout()`.
+  - Methods: `addLayout(lyt, int)`, `addStretch(int)`, `setDirection()`.
+
+- QFormLayout:
+  - Methods: `addRow(lbl, QWidget)`, `insertRow(idx, lbl, QWidget)`, `removeRow(idx)`, `setLabelAlignment(Qt.Alignment)`.
+
+- QGridLayout:
+  - Methods: `addWidget(QWidget, x, y, xsan, yspan)`.
+
+- Compound Layouts:
+  - Combine different layouts to form a bigger layout or design.
+
+QStackedLayout:
+- Achieves similar functionality to a tabbed form.
+- Use `QComboBox`, `QListBox`, or `QRadioButtons` to select the layout.
+- Methods: `addWidget()`, `setCurrentIndex(idx)`.
+

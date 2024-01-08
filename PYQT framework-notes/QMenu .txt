@@ -1,0 +1,8 @@
+QMenu 
+
+- only available with QMainWindow
+- can be created manually but much easier in QtDesigner
+- can be nested several levels deep
+- ever menu item is a QAction
+	- similar to a QPushButton but the same QAction can be triggered with a menu shortcut or toolbar icon
+	- QActions emit a triggered signal when triggered

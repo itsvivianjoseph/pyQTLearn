@@ -1,0 +1,51 @@
+QMessageBox:
+
+- Provides output to the user.
+- Can be used for simple input queries (yes/no, etc.).
+- Method 1: Static methods.
+  - Parent: QWidget that you want the message box to be centered in.
+  - Result: `QMessageBox.warning(parent, "title of box", "message")`
+  - Types: `warning`, `info`, `question`, `critical`.
+
+QInputDialog:
+
+- Parent: Dialog that the inputDialog will be centered in.
+- `QInputDialog.getText(parent, "title", "prompt", text="default")`
+- `QInputDialog.getInt(parent, "title", "prompt", iDef, iMin, iMax, iStep)`
+- `QInputDialog.getDouble(parent, "Title", "prompt", dDef, dMin, dMax, dDigits)`
+- `sList = ["item1", "item2", "item3"]`
+- `QInputDialog.getItem(parent, "title", "prompt", sList, editable=False)`
+- Returns a tuple.
+
+FontDialog:
+
+- `QFont` object.
+  - Example: `QFont("Arial", 24)` or `QFont("Arial", 24, 81, True)`.
+- Event Handler:
+  ```python
+  def evt_handler(self):
+      font, bOk = QFontDialog.getFont()
+      print(font, bOk)
+
+Date in QT:
+
+- `QDate`
+  - `QDate(yyyy, mm, dd)`
+  - Methods: `addDays()`, `addMonths()`, `toJulianDay()`, `dayOfWeek()`, `daysTo(QDate)`.
+- `QTime`
+  - `QTime(HH, MM, SS, ms)`
+  - Methods: `addSeconds()`, `secsTo(QTime)`, `toString()`.
+- `QTimeZone`
+  - `QTimeZone(seconds)`.
+- `QDateTime`
+  - `QDateTime(QDate, QTime)`.
+
+Images in QT:
+
+- `QPixmap(w, h)` - main object used to interact with images.
+  - Methods: `fill(QColor)`, `load(file)`.
+- `QPixmap(file)`.
+- `size()`, `height()`, `width()`.
+- `scaled(w, h)`, `scaledToWidth(w)`, `scaledToHeight(h)`.
+- `save(file)`.
+- `QImage`, `QPicture`, `QBitmap`, `QPainter`.

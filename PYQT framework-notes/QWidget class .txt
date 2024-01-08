@@ -1,0 +1,193 @@
+QWidget Class:
+
+Current State:
+- `isEnabled()`: Checks if the widget is enabled.
+- `isWindow()`: Checks if the widget is a window.
+- `isVisible()`: Checks if the widget is visible.
+- `isModal()`: Checks if the widget is modal.
+
+Positioning:
+- `move(x, y)`: Moves the widget to the specified coordinates.
+- `pos()`: Returns the current position of the widget.
+- `resize(w, h)`: Resizes the widget to the specified width and height.
+- `size()`: Returns the current size of the widget.
+- `setGeometry(x, y, w, h)`: Sets the geometry of the widget.
+
+Styling:
+- `setFont(QFont)`: Sets the font for the widget.
+- `setStyleSheet(str)`: Sets the style sheet for the widget.
+
+Tips:
+- `setStatusTip(String)`: Sets the status tip for the widget.
+- `setToolTip(String)`: Sets the tool tip for the widget.
+
+Visibility:
+- `show()`: Displays the widget.
+- `hide()`: Hides the widget.
+- `setEnabled(bool)`: Enables or disables the widget.
+
+---
+
+QPushButton:
+
+- Inherits from QAbstractButton.
+  - Methods:
+    - `setIcon(QIcon)`: Sets the icon for the button.
+    - `setText(str)`: Sets the text for the button.
+    - `setAutoRepeat(bool)`, `setAutoRepeatDelay(msec)`, `setAutoRepeatInterval(msec)`: Configures auto-repeat behavior.
+
+  - Signals:
+    - `clicked`: Triggered when the button is clicked.
+
+  - Constructor:
+    - `QPushButton(str, parent)`: Creates a QPushButton with text and parent.
+
+  - Additional Methods:
+    - `setFlat(bool)`: Sets the flat appearance.
+    - `setDefault(bool)`: Sets the default button.
+
+Explanation: `QPushButton` is a button that can contain text and an icon. It inherits from `QAbstractButton` and provides methods to set its appearance, behavior, and handle user interactions.
+
+---
+
+QCheckBox:
+
+- Inherits from QAbstractButton.
+  - Methods:
+    - `isChecked()`: Checks if the checkbox is checked.
+    - `setChecked(bool)`: Sets the checkbox's checked state.
+
+  - Signals:
+    - `clicked(bool)`: Triggered when the checkbox is clicked.
+    - `toggled(bool)`: Triggered when the checkbox is toggled.
+
+  - Constructor:
+    - `QCheckBox(str, parent)`: Creates a QCheckBox with text and parent.
+
+  - Additional Methods:
+    - `isTristate()`, `setTristate(bool)`: Configures tristate behavior.
+    - `checkState()`, `setCheckState(QT.CheckState)`: Gets or sets the check state.
+
+Explanation: `QCheckBox` is a box that can be checked or unchecked, and it inherits from `QAbstractButton`. It provides methods to handle check state and signals when the state changes.
+
+---
+
+QRadioButton:
+
+- Inherits from QAbstractButton.
+- Constructor:
+  - `QRadioButton(str, parent)`: Creates a QRadioButton with text and parent.
+- By default, radio buttons are auto-exclusive.
+  - Only one of the radio buttons in a single parent widget can be checked.
+  - Checking one automatically unchecks the others.
+- For multiple groups, use separate parent widgets or a QButtonGroup.
+  - `setExclusive(bool)`: Sets exclusivity in a QButtonGroup.
+
+Explanation: `QRadioButton` is a button that represents a choice. It inherits from `QAbstractButton` and provides exclusive behavior within a group, where only one button can be selected at a time.
+
+---
+
+QLineEdit:
+
+- `QLineEdit(parent)`: Creates a QLineEdit with parent.
+- `QLineEdit(str, parent)`: Creates a QLineEdit with text and parent.
+- Methods:
+  - `text()`, `setText(str)`, `clear()`: Gets or sets text.
+  - `setPlaceholderText(str)`: Sets placeholder text.
+  - `setReadOnly(bool)`: Sets read-only mode.
+  - `setEchoMode(QLineEdit.Password)`: Sets echo mode.
+  - `setAlignment(Qt.Alignment)`: Sets text alignment.
+  - `setMaxLength(int)`: Sets the maximum length.
+
+- Signals:
+  - `textChanged(str)`, `textEdited(str)`: Triggered on text changes.
+  - `editingFinished()`: Triggered when editing is finished.
+
+Explanation: `QLineEdit` is a single-line text input field. It provides methods to manage text input, appearance, and signals to handle text changes and editing completion.
+
+---
+
+QAbstractSpinBox:
+
+- Methods:
+  - `setReadOnly(bool)`, `isReadOnly()`.
+  - `setAlignment(Qt.Alignment)`.
+  - `setWrapping(bool)`.
+  - `text()`, `clear()`, `selectAll()`.
+  - `stepUp()`, `stepDown()`.
+
+- Signal:
+  - `editingFinished()`.
+
+QSpinBox & QDoubleSpinBox:
+
+- Methods:
+  - `setMinimum(int)`, `setMaximum(int)`, `setRange(min, max)`.
+  - `setSingleStep(int)`.
+  - `setPrefix(str)`, `setSuffix(str)`.
+  - `setValue(int)`, `value()`.
+
+- Signals:
+  - `textChanged(str)`.
+  - `valueChanged(int)`.
+
+- `QDoubleSpinBox` is identical to `QSpinBox` but for doubles.
+
+Explanation: `QAbstractSpinBox` is an abstract class for spin box widgets. `QSpinBox` and `QDoubleSpinBox` are spin box widgets for integers and doubles, respectively.
+
+---
+
+QDateTimeEdit:
+
+- Inherits from QAbstractSpinBox.
+- Constructors:
+  - `QDateTimeEdit(QTime, parent)`, `QDateTimeEdit(QDate, parent)`.
+  - `QDateTimeEdit(QDateTime, parent)`, `QDateTimeEdit(parent)`.
+
+- Methods:
+  - `setCalendarPopup(bool)`, `setCalendarWidget(QCalendarWidget)`.
+  - `date()`, `time()`, `dateTime()`.
+  - `setDate()`, `setTime()`, `setDateTime()`.
+  - `setMinimumDate(QDate)`, `setMaximumDate(QDate)`, `setDateRange(QDate, QDate)`.
+  - `setDisplayFormat(str)`.
+
+- Signals:
+  - `dateChanged(QDate)`, `dateTimeChanged(QDateTime)`, `timeChanged(QTime)`.
+
+Explanation: `QDateTimeEdit` is a widget for editing dates and times. It provides methods to set and retrieve date and time values, along with signals for changes.
+
+---
+
+QComboBox - Simple:
+
+- `QComboBox(parent)`.
+- Methods:
+  - Adding Items: `addItem(QIcon, txt, obj)`, `insertItem(idx, QIcon, txt, obj)`, `insertSeparator(idx)`.
+  - Adding Lists: `addItems(list)`, `insertItems(idx, list)`.
+  - Removing: `removeItem(idx)`, `clear()`.
+  - Information: `count()`, `currentIndex()`, `currentData()`, `currentText()`.
+  - Item Information: `itemText(idx)`, `itemData(idx)`, `itemIcon(idx)`.
+  - Setting Items: `setItemText(idx, txt)`, `setItemData(idx, obj)`, `setItemIcon(idx, QIcon)`.
+  - Display Properties: `setMaxCount(int)`, `setMaxVisibleItems(int)`, `setPlaceholderText(int)`.
+  - Selection: `setCurrentIndex(idx)`, `setCurrentText(idx)`.
+
+- Signals:
+  - `currentIndexChanged(idx)`, `currentTextChanged(txt)`.
+  - `activated(idx)`, `textActivated(txt)`.
+  - `highlighted(idx)`, `textHighlighted(txt)`.
+
+---
+
+QComboBox - Editable:
+
+- Methods:
+  - `setEditable(bool)`, `isEditable()`.
+  - `lineEdit()`, `setLineEdit()`.
+  - `clearEditText()`, `setEditText(txt)`.
+
+- Signals:
+  - `editTextChanged(txt)`.
+
+Explanation: `QComboBox` is a widget that allows the selection of items from a list. It provides methods for adding, removing, and configuring items, along with signals for user interactions.
+
+---

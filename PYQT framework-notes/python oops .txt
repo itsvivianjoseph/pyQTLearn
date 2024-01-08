@@ -1,0 +1,93 @@
+python oops :
+
+Object-oriented programming (OOP) is a programming paradigm that uses objects, which bundle data and methods that operate on the data, to design and organize code. Python is an object-oriented programming language, and it supports various OOP concepts. Here are some key concepts of OOP in Python:
+
+1. Class:
+   - A class is a blueprint or a template for creating objects.
+   - It defines the attributes (data members) and methods (functions) that the objects will have.
+   - Objects are instances of a class.
+
+   Example:
+
+   class Car:
+       def __init__(self, make, model):
+           self.make = make
+           self.model = model
+       
+       def start_engine(self):
+           print("Engine started!")
+
+
+2. Object:
+   - An object is an instance of a class.
+   - It represents a real-world entity and contains data (attributes) and the behaviors (methods) that operate on the data.
+
+   Example:
+   my_car = Car("Toyota", "Camry")
+
+3. Encapsulation:
+   - Encapsulation is the bundling of data and the methods that operate on the data within a single unit (class).
+   - It helps in hiding the internal implementation details and exposing only what is necessary.
+
+   Example:
+   class BankAccount:
+       def __init__(self, balance):
+           self._balance = balance  # _balance is a protected attribute
+
+       def withdraw(self, amount):
+           if amount <= self._balance:
+               self._balance -= amount
+               print(f"Withdrawal successful. Remaining balance: {self._balance}")
+           else:
+               print("Insufficient funds.")
+
+4. Inheritance:
+   - Inheritance allows a class (subclass/derived class) to inherit attributes and methods from another class (base class/parent class).
+   - It promotes code reusability.
+
+   Example:
+   class ElectricCar(Car):
+       def __init__(self, make, model, battery_capacity):
+           super().__init__(make, model)
+           self.battery_capacity = battery_capacity
+
+5. Polymorphism:
+   - Polymorphism allows objects of different classes to be treated as objects of a common base class.
+   - It enables the same method name to be used for different types of objects.
+
+   Example:
+   def accelerate(vehicle):
+       vehicle.start_engine()
+
+   accelerate(my_car)
+   accelerate(my_electric_car)
+
+6. Abstraction:
+   - Abstraction involves hiding the complex implementation details and exposing only the necessary features.
+   - It helps in simplifying the interaction with objects.
+
+   Example:
+   from abc import ABC, abstractmethod
+
+   class Shape(ABC):
+       @abstractmethod
+       def area(self):
+           pass
+
+These OOP concepts in Python help in designing modular, reusable, and maintainable code by organizing code into manageable units (classes and objects) and promoting code structure and flexibility.
+
+defining custom classes :
+
+class Point:
+	def __init__(self,x,y):
+		self.x = x
+		self.y = y
+		self.srs = srs
+
+	def distance_to(self,pt):
+		return ((self.x - pt.x)**2 + (self.y-pt.y)**2)**0.5
+
+	
+- __init__ is the constructor method but called by the class name
+- self refers to the instance being created
+- self is included automatically when calling methods
