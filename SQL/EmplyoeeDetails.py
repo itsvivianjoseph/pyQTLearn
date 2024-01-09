@@ -2,302 +2,8 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtSql import *
 from PyQt5.QtCore import *
-
-
-# add new employee class
-class AddEmployeeDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("Add Employee")
-        self.resize(300, 200)
-
-        # define layout type
-        self.layout = QVBoxLayout()
-
-        # create widgets
-        self.create_widgets()
-
-        # add widgets to the layout
-        self.add_widgets()
-
-        # validation
-        self.fname_edit.textChanged.connect(self.validate_first_name)
-        self.lname_edit.textChanged.connect(self.validate_last_name)
-        self.email_edit.textChanged.connect(self.validate_email)
-
-        # event handlers
-        self.add_button.clicked.connect(self.validate_and_accept)
-
-        # set layout
-        self.setLayout(self.layout)
-
-    def validate_and_accept(self):
-        validation_result = self.validate_input_fields()
-
-        if validation_result:
-            self.accept()
-        else:
-            QMessageBox.information(self, "Invalid details", "Invalid employee details:\n{}".format(validation_result))
-
-    def validate_first_name(self):
-        self.fname_edit.setStyleSheet("")
-        if len(self.fname_edit.text()) < 2:
-            self.fname_edit.setStyleSheet(style_line_edit_error())
-        else:
-            self.fname_edit.setStyleSheet(style_line_edit_correct())
-
-    def validate_last_name(self):
-        self.lname_edit.setStyleSheet("")
-        if len(self.lname_edit.text()) < 2:
-            self.lname_edit.setStyleSheet(style_line_edit_error())
-        else:
-            self.lname_edit.setStyleSheet(style_line_edit_correct())
-
-    def validate_email(self):
-        self.email_edit.setStyleSheet("")
-        if self.email_edit.text().find('@') < 1 or self.email_edit.text().find('.') < 3:
-            self.email_edit.setStyleSheet(style_line_edit_error())
-        else:
-            self.email_edit.setStyleSheet(style_line_edit_correct())
-
-    def validate_input_fields(self):
-        errors = ""
-
-        # Validate first name
-        if len(self.fname_edit.text()) < 2:
-            errors += "\n First name has to be at least two characters"
-
-        # Validate last name
-        if len(self.lname_edit.text()) < 2:
-            errors += "\n Last name has to be at least two characters"
-
-        # Validate email
-        if self.email_edit.text().find('@') < 1:
-            errors += "\n Invalid Email"
-
-        if self.email_edit.text().find('.') < 3:
-            errors += "\n Email ID shouldn't contain any periods"
-
-        # Validate phone
-        if not self.phone_edit.text():
-            errors += "\n Phone number field not mentioned"
-
-        # Validate position
-        if not self.position_edit.text():
-            errors += "\n Position field not mentioned"
-
-        # Validate supervisor
-        if not self.supervisor_edit.text():
-            errors += "\n Supervisor field not mentioned"
-
-        if errors:
-            errors = "Please correct the below errors:\n" + errors
-            print(errors)
-            return errors
-
-        # Return None if there are no errors
-        return None
-
-    def add_widgets(self):
-        self.layout.addWidget(self.fname_label)
-        self.layout.addWidget(self.fname_edit)
-        self.layout.addWidget(self.lname_label)
-        self.layout.addWidget(self.lname_edit)
-        self.layout.addWidget(self.email_label)
-        self.layout.addWidget(self.email_edit)
-        self.layout.addWidget(self.phone_label)
-        self.layout.addWidget(self.phone_edit)
-        self.layout.addWidget(self.position_label)
-        self.layout.addWidget(self.position_edit)
-        self.layout.addWidget(self.supervisor_label)
-        self.layout.addWidget(self.supervisor_edit)
-        self.layout.addWidget(self.add_button)
-
-    def get_user_input(self):
-        return {
-            "fname": self.fname_edit.text(),
-            "lname": self.lname_edit.text(),
-            "email": self.email_edit.text(),
-            "phone": self.phone_edit.text(),
-            "position": self.position_edit.text(),
-            "supervisor": self.supervisor_edit.text()
-        }
-
-    def create_widgets(self):
-        # first name label
-        self.fname_label = QLabel("First Name:")
-        self.fname_edit = QLineEdit()
-
-        # last name label
-        self.lname_label = QLabel("Last Name:")
-        self.lname_edit = QLineEdit()
-
-        # email label
-        self.email_label = QLabel("Email:")
-        self.email_edit = QLineEdit()
-
-        # phone label
-        self.phone_label = QLabel("Phone:")
-        self.phone_edit = QLineEdit()
-
-        # position label
-        self.position_label = QLabel("Position:")
-        self.position_edit = QLineEdit()
-
-        # supervisor label
-        self.supervisor_label = QLabel("Supervisor ID:")
-        self.supervisor_edit = QLineEdit()
-
-        # submit button
-        self.add_button = QPushButton("submit")
-
-
-# update employee details
-class UpdateEmployeeDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("Update Employee")
-        self.resize(300, 200)
-
-        # define layout type
-        self.layout = QVBoxLayout()
-
-        # create widgets
-        self.create_widgets()
-
-        # add widgets to the layout
-        self.add_widgets()
-
-        # validation
-        self.fname_edit.textChanged.connect(self.validate_first_name)
-        self.lname_edit.textChanged.connect(self.validate_last_name)
-        self.email_edit.textChanged.connect(self.validate_email)
-
-        # event handlers
-        self.add_button.clicked.connect(self.validate_and_accept)
-
-        # set layout
-        self.setLayout(self.layout)
-
-    def validate_and_accept(self):
-        validation_result = self.validate_input_fields()
-
-        if validation_result:
-            self.accept()
-        else:
-            QMessageBox.information(self, "Invalid details", "Invalid employee details:\n{}".format(validation_result))
-
-    def validate_first_name(self):
-        self.fname_edit.setStyleSheet("")
-        if len(self.fname_edit.text()) < 2:
-            self.fname_edit.setStyleSheet(style_line_edit_error())
-        else:
-            self.fname_edit.setStyleSheet(style_line_edit_correct())
-
-    def validate_last_name(self):
-        self.lname_edit.setStyleSheet("")
-        if len(self.lname_edit.text()) < 2:
-            self.lname_edit.setStyleSheet(style_line_edit_error())
-        else:
-            self.lname_edit.setStyleSheet(style_line_edit_correct())
-
-    def validate_email(self):
-        self.email_edit.setStyleSheet("")
-        if self.email_edit.text().find('@') < 1 or self.email_edit.text().find('.') < 3:
-            self.email_edit.setStyleSheet(style_line_edit_error())
-        else:
-            self.email_edit.setStyleSheet(style_line_edit_correct())
-
-    def validate_input_fields(self):
-        errors = ""
-
-        # Validate first name
-        if len(self.fname_edit.text()) < 2:
-            errors += "\n First name has to be at least two characters"
-
-        # Validate last name
-        if len(self.lname_edit.text()) < 2:
-            errors += "\n Last name has to be at least two characters"
-
-        # Validate email
-        if self.email_edit.text().find('@') < 1:
-            errors += "\n Invalid Email"
-
-        if self.email_edit.text().find('.') < 3:
-            errors += "\n Email ID shouldn't contain any periods"
-
-        # Validate phone
-        if not self.phone_edit.text():
-            errors += "\n Phone number field not mentioned"
-
-        # Validate position
-        if not self.position_edit.text():
-            errors += "\n Position field not mentioned"
-
-        # Validate supervisor
-        if not self.supervisor_edit.text():
-            errors += "\n Supervisor field not mentioned"
-
-        if errors:
-            errors = "Please correct the below errors:\n" + errors
-            print(errors)
-            return errors
-
-        # Return None if there are no errors
-        return None
-
-    def add_widgets(self):
-        self.layout.addWidget(self.fname_label)
-        self.layout.addWidget(self.fname_edit)
-        self.layout.addWidget(self.lname_label)
-        self.layout.addWidget(self.lname_edit)
-        self.layout.addWidget(self.email_label)
-        self.layout.addWidget(self.email_edit)
-        self.layout.addWidget(self.phone_label)
-        self.layout.addWidget(self.phone_edit)
-        self.layout.addWidget(self.position_label)
-        self.layout.addWidget(self.position_edit)
-        self.layout.addWidget(self.supervisor_label)
-        self.layout.addWidget(self.supervisor_edit)
-        self.layout.addWidget(self.add_button)
-
-    def get_user_input(self):
-        return {
-            "fname": self.fname_edit.text(),
-            "lname": self.lname_edit.text(),
-            "email": self.email_edit.text(),
-            "phone": self.phone_edit.text(),
-            "position": self.position_edit.text(),
-            "supervisor": self.supervisor_edit.text()
-        }
-
-    def create_widgets(self):
-        # first name label
-        self.fname_label = QLabel("First Name:")
-        self.fname_edit = QLineEdit()
-
-        # last name label
-        self.lname_label = QLabel("Last Name:")
-        self.lname_edit = QLineEdit()
-
-        # email label
-        self.email_label = QLabel("Email:")
-        self.email_edit = QLineEdit()
-
-        # phone label
-        self.phone_label = QLabel("Phone:")
-        self.phone_edit = QLineEdit()
-
-        # position label
-        self.position_label = QLabel("Position:")
-        self.position_edit = QLineEdit()
-
-        # supervisor label
-        self.supervisor_label = QLabel("Supervisor ID:")
-        self.supervisor_edit = QLineEdit()
-
-        # submit button
-        self.add_button = QPushButton("submit")
+from AddEmployeeDetails import AddEmployeeDialog
+from UpdateEmployeeDetails import UpdateEmployeeDialog
 
 
 class DlgMain(QDialog):
@@ -336,13 +42,11 @@ class DlgMain(QDialog):
         self.button_update_emp.clicked.connect(self.evt_handler_button_update_emp)
 
         self.button_delete_emp = QPushButton("Delete Employee")
+        self.button_delete_emp.clicked.connect(self.evt_handler_button_delete_emp)
 
         self.button_layout.addWidget(self.button_add_emp)
         self.button_layout.addWidget(self.button_update_emp)
         self.button_layout.addWidget(self.button_delete_emp)
-
-    def evt_handler_button_update_emp(self):
-        pass
 
     def setup_left_layout(self):
         self.list_widget = QListWidget()
@@ -363,9 +67,13 @@ class DlgMain(QDialog):
         self.main_layout.addLayout(self.inner_layout)
 
     def populate_table(self):
+        # Clear the list widget
+        self.list_widget.clear()
+
         # create table
         self.table_emp_details.setColumnCount(7)
-        self.table_emp_details.setHorizontalHeaderLabels(["ID", "Fname", "Lname", "Email", "Phone", "Position", "Supervisor"])
+        self.table_emp_details.setHorizontalHeaderLabels(
+            ["ID", "Fname", "Lname", "Email", "Phone", "Position", "Supervisor"])
         self.table_emp_details.setColumnWidth(0, 50)
         self.table_emp_details.setColumnWidth(1, 80)
         self.table_emp_details.setColumnWidth(2, 80)
@@ -485,9 +193,83 @@ class DlgMain(QDialog):
 
             if query.exec(sql_insert_data):
                 QMessageBox.information(self, "Employee added", "Employee details added to the table")
+
+                # Clear the current table
+                self.table_emp_details.setRowCount(0)
+
+                # Repopulate the table
+                self.populate_table()
+
             else:
                 QMessageBox.critical(self, "Database error", "Failed to insert data into the employee table!")
 
+    def evt_handler_button_update_emp(self):
+        emp_id, ok = QInputDialog.getInt(self, 'Update Employee', 'Enter Employee ID:')
+        if ok:
+            update_dialog = UpdateEmployeeDialog(self, emp_id)
+
+            if update_dialog.exec_() == QDialog.Accepted:
+                user_input = update_dialog.get_user_input()
+
+                print("User Input:", user_input)
+
+                query = QSqlQuery()
+
+                sql = """
+                            UPDATE employee
+                            SET fname = '{fname}',
+                                lname = '{lname}',
+                                email = '{email}',
+                                phone = '{phone}',
+                                position = '{position}',
+                                supervisor = '{supervisor}'
+                            WHERE emp_id = {emp_id}
+                        """.format(
+                    fname=user_input["fname"],
+                    lname=user_input["lname"],
+                    email=user_input["email"],
+                    phone=user_input["phone"],
+                    position=user_input["position"],
+                    supervisor=user_input["supervisor"],
+                    emp_id=user_input["emp_id"]
+                )
+
+                if query.exec_(sql):
+                    print("Employee updated successfully!")
+
+                    # Clear the current table
+                    self.table_emp_details.setRowCount(0)
+
+                    # Repopulate the table
+                    self.populate_table()
+
+                else:
+                    print("Error updating employee:", query.lastError().text())
+        else:
+            return None
+
+    def evt_handler_button_delete_emp(self):
+        emp_id, ok = QInputDialog.getInt(self, 'Delete Employee', 'Enter Employee ID:')
+        if ok:
+            # Delete the employee record
+            query_delete = QSqlQuery()
+            sql_delete = "DELETE FROM employee WHERE emp_id = :emp_id"
+            query_delete.prepare(sql_delete)
+            query_delete.bindValue(":emp_id", emp_id)
+
+            if not query_delete.exec_():
+                QMessageBox.critical(self, "Database error","Query wasn't successful \n{}".format(query_delete.lastError()))
+                return
+
+            print("{} Employee's record has been deleted!!!".format(emp_id))
+
+            # Clear the current table
+            self.table_emp_details.setRowCount(0)
+
+            # Repopulate the table
+            self.populate_table()
+        else:
+            QMessageBox.information(self,"Error occurred","Some error has occurred retry!!!")
 
 def style_line_edit_error():
     styles = """
@@ -500,10 +282,11 @@ def style_line_edit_error():
 def style_line_edit_correct():
     styles = """
         QLineEdit {
-            border : 1px solid greeen;
+            border : 1px solid green;
         }
     """
     return styles
+
 
 
 if __name__ == "__main__":
