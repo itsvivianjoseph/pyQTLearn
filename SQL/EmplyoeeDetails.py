@@ -7,6 +7,9 @@ from UpdateEmployeeDetails import UpdateEmployeeDialog
 
 
 class DlgMain(QDialog):
+    # attributes
+    employee_data = []
+
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Employee Database")
@@ -27,12 +30,32 @@ class DlgMain(QDialog):
         # setup layout
         self.setup_button_layout()
         self.setup_left_layout()
+        self.setup_main_layout()
         self.setup_right_layout()
         self.setup_inner_layout()
-        self.setup_main_layout()
+
+        # synchronize the current item selected on table widget and list widget
+        self.list_widget.currentItemChanged.connect(self.on_list_widget_item_changed)
 
         # set up the application layout as the main layout
         self.setLayout(self.main_layout)
+
+    def on_list_widget_item_changed(self, current_item, previous_item):
+        if current_item:
+            index = self.list_widget.row(current_item)
+
+            if 0 <= index < self.table_emp_details.rowCount():
+                # Select the corresponding row in the table
+                self.table_emp_details.selectRow(index)
+
+                # Get the supervisor ID of the selected employee
+                emp_data = self.employee_data[index]
+                supervisor_id = emp_data["supervisor"]
+
+                # Find the corresponding item in the tree_widget based on supervisor ID
+                tree_items = self.tree_widget.findItems(str(supervisor_id), Qt.MatchRecursive, 0)
+                if tree_items:
+                    self.tree_widget.setCurrentItem(tree_items[0])
 
     def setup_button_layout(self):
         self.button_add_emp = QPushButton("Add Employee")
@@ -54,10 +77,24 @@ class DlgMain(QDialog):
         self.left_layout.addLayout(self.button_layout)
 
     def setup_right_layout(self):
+        # employee table setup
         self.table_emp_details = QTableWidget()
+        # Populate the table and tree after setting them up
         self.populate_table()
-        # Add the QTableWidget to the right_layout
+
+        # employee supervisor tree-setup
+        self.tree_widget = QTreeWidget()
+        # Set the header labels for the columns
+        self.tree_widget.setHeaderLabels(["ID", "Name", "Phone", "Email", "Position", "Supervisor"])
+        # insert into tree
+        self.populate_tree()
+
+
+        # Add the QTableWidget to the right layout
         self.right_layout.addWidget(self.table_emp_details)
+        # Add the QTreeWidget to the right layout
+        self.right_layout.addWidget(self.tree_widget)
+
 
     def setup_inner_layout(self):
         self.inner_layout.addLayout(self.left_layout, 20)
@@ -66,11 +103,7 @@ class DlgMain(QDialog):
     def setup_main_layout(self):
         self.main_layout.addLayout(self.inner_layout)
 
-    def populate_table(self):
-        # Clear the list widget
-        self.list_widget.clear()
-
-        # create table
+    def table_creation(self):
         self.table_emp_details.setColumnCount(7)
         self.table_emp_details.setHorizontalHeaderLabels(
             ["ID", "Fname", "Lname", "Email", "Phone", "Position", "Supervisor"])
@@ -82,42 +115,82 @@ class DlgMain(QDialog):
         self.table_emp_details.setColumnWidth(5, 130)
         self.table_emp_details.setColumnWidth(6, 200)
 
+        self.table_emp_details.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.table_emp_details.setAlternatingRowColors(True)
+        self.list_widget.setAlternatingRowColors(True)
+
+    def populate_table(self):
+        # Clear the list widget
+        self.list_widget.clear()
+
+        # create table
+        self.table_creation()
+
         # populating the table
-        query = QSqlQuery()
-        res = query.exec("SELECT * FROM employee")
-        if res:
-            while query.next():
-                row = self.table_emp_details.rowCount()
-                self.table_emp_details.insertRow(row)
+        for emp_data in self.employee_data:
+            row = self.table_emp_details.rowCount()
+            self.table_emp_details.insertRow(row)
 
-                for col in range(6):
-                    twi = QTableWidgetItem(str(query.value(col)))
-                    twi.setTextAlignment(Qt.AlignCenter)
-                    self.table_emp_details.setItem(row, col, twi)
-                twi = QTableWidgetItem(self.return_emp_name(query.value("emp_id")))
-                self.table_emp_details.setItem(row, 6, twi)
+            for col, field in enumerate(["emp_id", "fname", "lname", "email", "phone", "position"]):
+                twi = QTableWidgetItem(str(emp_data[field]))
+                twi.setTextAlignment(Qt.AlignCenter)
+                self.table_emp_details.setItem(row, col, twi)
 
-                self.list_widget.addItem(self.return_emp_name(query.value("emp_id")))
-        else:
-            QMessageBox.critical(self, "Database error", "Database error\n\n{}".format(query.lastError().text()))
+            supervisor_details = self.return_emp_name(emp_data["supervisor"])
+            emp_id = emp_data["emp_id"]
 
-    def return_emp_name(self, id):
-        query = QSqlQuery()
-        sql = "SELECT fname,lname,position FROM employee WHERE emp_id = {}".format(int(id))
-        res = query.exec(sql)
+            twi = QTableWidgetItem(supervisor_details)
+            self.table_emp_details.setItem(row, 6, twi)
 
-        if res:
-            query.next()
-            if query.isValid():
-                fname, lname, position = query.value("fname"), query.value("lname"), query.value("position")
-                return "{}, {}, {}".format(fname, lname, position)
+            # Add user role data to the list widget items
+            list_widget_item = QListWidgetItem("{} {}".format(emp_data["fname"],emp_data["lname"]))
+            list_widget_item.setData(Qt.UserRole, emp_id)
+            self.list_widget.addItem(list_widget_item)
+
+    def populate_tree(self):
+        # Clear existing items in the tree
+        self.tree_widget.clear()
+
+        for emp_data in self.employee_data:
+            emp_id = emp_data["emp_id"]
+            name = "{} {}".format(emp_data["fname"], emp_data["lname"])
+            phone = emp_data["phone"]
+            email = emp_data["email"]
+            position = emp_data["position"]
+            supervisor = emp_data["supervisor"]
+
+            # Conversion to string
+            emp_id_str = str(emp_id)
+            supervisor_str = str(supervisor)
+
+            tree_widget_item = QTreeWidgetItem([emp_id_str, name, phone, email, position, supervisor_str])
+
+            # Find the parent (supervisor) and add the current item as a child
+            parent_item = self.find_tree_item(emp_data["supervisor"])
+            if parent_item:
+                parent_item.addChild(tree_widget_item)
             else:
-                print("Invalid record position")
-        else:
-            print("Database error: {}".format(query.lastError().text()))
-            QMessageBox.critical(self, "Database error", "Database error\n\n{}".format(query.lastError().text()))
+                self.tree_widget.addTopLevelItem(tree_widget_item)
 
-        return ""
+    def find_tree_item(self, supervisor_id):
+        for item_index in range(self.tree_widget.topLevelItemCount()):
+            item = self.tree_widget.topLevelItem(item_index)
+            if item.text(0) == str(supervisor_id):
+                return item
+            child_item = self.find_child_tree_item(item, supervisor_id)
+            if child_item:
+                return child_item
+        return None
+
+    def find_child_tree_item(self, parent_item, supervisor_id):
+        for child_index in range(parent_item.childCount()):
+            child_item = parent_item.child(child_index)
+            if child_item.text(0) == str(supervisor_id):
+                return child_item
+            sub_child_item = self.find_child_tree_item(child_item, supervisor_id)
+            if sub_child_item:
+                return sub_child_item
+        return None
 
     def db_connection(self):
         db = QSqlDatabase.addDatabase("QSQLITE")
@@ -126,8 +199,24 @@ class DlgMain(QDialog):
             print("table name:", db.tables())
             if "employee" not in db.tables():
                 self.create_table()
+            self.populate_data()
         else:
             QMessageBox.critical(self, "Database error", "Couldn't open the Database!!!")
+
+    def populate_data(self):
+        self.employee_data = []
+        query = QSqlQuery("SELECT * FROM employee")
+        while query.next():
+            emp_data = {
+                "emp_id": query.value("emp_id"),
+                "fname": query.value("fname"),
+                "lname": query.value("lname"),
+                "email": query.value("email"),
+                "phone": query.value("phone"),
+                "position": query.value("position"),
+                "supervisor": query.value("supervisor"),
+            }
+            self.employee_data.append(emp_data)
 
     def create_table(self):
         # Create the employee table if not exists
@@ -169,6 +258,24 @@ class DlgMain(QDialog):
         if not query.exec(sql_insert_data):
             QMessageBox.critical(self, "Database error", "Failed to insert data into the employee table!")
 
+    def return_emp_name(self, supervisor_id):
+        query = QSqlQuery()
+        sql = "SELECT fname,lname,position FROM employee WHERE emp_id = {}".format(int(supervisor_id))
+        res = query.exec(sql)
+
+        if res:
+            query.next()
+            if query.isValid():
+                fname, lname, position = query.value("fname"), query.value("lname"), query.value("position")
+                return "{}, {}, {}".format(fname, lname, position)
+            else:
+                print("Invalid record position")
+        else:
+            print("Database error: {}".format(query.lastError().text()))
+            QMessageBox.critical(self, "Database error", "Database error\n\n{}".format(query.lastError().text()))
+
+        return ""
+
     def evt_handler_button_add_emp(self):
         add_employee_dialog = AddEmployeeDialog(self)
         result = add_employee_dialog.exec_()
@@ -194,16 +301,23 @@ class DlgMain(QDialog):
             if query.exec(sql_insert_data):
                 QMessageBox.information(self, "Employee added", "Employee details added to the table")
 
+                # Update the class attribute
+                self.populate_data()
+
                 # Clear the current table
                 self.table_emp_details.setRowCount(0)
 
                 # Repopulate the table
                 self.populate_table()
 
+                # Repopulate the tree
+                self.populate_tree()
+
             else:
                 QMessageBox.critical(self, "Database error", "Failed to insert data into the employee table!")
 
     def evt_handler_button_update_emp(self):
+        # emp_id = self.list_widget.currentItem().data(Qt.userRole)
         emp_id, ok = QInputDialog.getInt(self, 'Update Employee', 'Enter Employee ID:')
         if ok:
             update_dialog = UpdateEmployeeDialog(self, emp_id)
@@ -237,11 +351,17 @@ class DlgMain(QDialog):
                 if query.exec_(sql):
                     print("Employee updated successfully!")
 
+                    # Update the class attribute
+                    self.populate_data()
+
                     # Clear the current table
                     self.table_emp_details.setRowCount(0)
 
                     # Repopulate the table
                     self.populate_table()
+
+                    # Repopulate the tree
+                    self.populate_tree()
 
                 else:
                     print("Error updating employee:", query.lastError().text())
@@ -263,30 +383,19 @@ class DlgMain(QDialog):
 
             print("{} Employee's record has been deleted!!!".format(emp_id))
 
+            # Update the class attribute
+            self.populate_data()
+
             # Clear the current table
             self.table_emp_details.setRowCount(0)
 
             # Repopulate the table
             self.populate_table()
+
+            # Repopulate the tree
+            self.populate_tree()
         else:
             QMessageBox.information(self,"Error occurred","Some error has occurred retry!!!")
-
-def style_line_edit_error():
-    styles = """
-        QLineEdit {
-            border : 1px solid red;
-        }
-    """
-    return styles
-
-def style_line_edit_correct():
-    styles = """
-        QLineEdit {
-            border : 1px solid green;
-        }
-    """
-    return styles
-
 
 
 if __name__ == "__main__":

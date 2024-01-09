@@ -1,0 +1,93 @@
+QT Model View Architecture:
+
+- Qt has some view classes that we've already worked with:	
+	- QListWidget <- QListView
+	- QTreeWidget <- QTreeView
+	- QTableWidget <- QTableView
+	
+- QxxxxView classes are designed to work with a data model
+- QxxxxWidget classes use a QStandardItemModel behind the scenes
+- QAbstractItemView is the base class for all model-based widgetsf
+	- setModel() method
+	- activated(), clicked() and doubleClicked() signals
+
+whats a model? 
+
+- a model provides access to data, in an organized fashion
+- In Qt a model can be thought of as a grid, each ,model item has 
+	- row
+	- column
+	- parent
+- a model item can be referred to by its index
+ 	- QModelIndex class
+- QAbstractItemModel
+	- QStandardItemModel - used in widget classes
+	- QFileSystemModel - can read in file system data
+	- QAbstractTableModel
+		- QSqlQueryModel - read only data model based on SQL SELECT query
+			- QSqlTableModel - editable data model based on a single table
+				- QSqlRelationalTableModel - editable model based on two joined classes
+
+- many models can populate themselves automatically - eg : QFileSystemModel
+- view Widgets know what to do with a model
+- QAbstractItemModel
+	- index(row,col,parent) - returns QModelIndex
+	- setData(QModelindex,value,role)
+	- setCurrentIndex(QModelIndex), setRootIndex(QModelIndex)
+	- sort(col, order)
+	- rowCount() , columnCount()
+	- hasChildern()
+	- Methods to insert and remove rows and columns 
+- The QModelIndex class provides access to an individual data item
+	- row() , column() ,parent(), sibiling()
+	- data(role)
+
+QFileSystemModel and helper classes :
+- index(path, col) - returns QModelIndex
+- fileName(QMI), filePath(QMI), size(QMI), type(QMI), lastModified(QMI)
+- mkdir(QMI, name), rmdir(QMI), remove(QMI)
+-setFilters, setNameFilters
+- fileInfo(QMI) returns QFileInfo object
+- QFileInfo 
+	- basename(), birthtime(), lastRead(), suffix(), dir(), owner(), permissions()
+	- isDir(), isExecutable(), isFile(), isHidden(), isReadable(), isWritabe(), isSymLink()
+- QDir class
+	- currentPath(), homePath(), rootPath(), tempPath(), toNativeSeperators()
+	- count(), isEmpty(), isReadable(), mkdir(name) , rename(old,new)
+
+QSqlQueryModel:
+
+- read-only mode
+	- setQuery(str)
+	- lastError()
+	- record(row)
+	- data(qmi, role)
+	- rowCount(), colCount()
+- QSqlRecord
+	- count(), fieldName(idx), indexOf(field_name)
+	- value(idx), value(field_name)
+	- setValue(idx, val), setValue(field_name, val)
+
+QSqlTable Model:
+
+- Editable data model
+	- setTable(table_name)
+	- setSort(col, sortOrder), s
+	- setFilter(str) - where clause
+	- setEditStrategy(enum)
+		- onFieldChange, onRowChange, onManualSubmit
+	- insertRecord(row, QSR), setRecord(row, QSR), removeRow(row)
+	- submit(), submitAll(), revert(), revertAll()
+	
+- signals
+	- beforeUpdate(), beforeInsert(), beforeDelete()
+
+Item Delegates:
+
+- handles rendering 
+- QAbstractItemDelegate
+	- QItemDelegate
+	- QstyledItemDelegate
+
+
+

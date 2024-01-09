@@ -224,6 +224,7 @@ def style_line_edit_error():
     """
     return styles
 
+
 def style_line_edit_correct():
     styles = """
         QLineEdit {
