@@ -30,10 +30,6 @@ This repository serves as a playground for learning PyQt. Feel free to explore t
 
 If you're also learning PyQt and have something to share or improve, feel free to contribute! Follow standard GitHub practices for pull requests and issues. 🤝
 
-## Acknowledgments
-
-No description, website, or topics provided.
-
 ---
 
 © 2024 GitHub, Inc. 🌐
