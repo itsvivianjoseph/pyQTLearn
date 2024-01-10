@@ -1,0 +1,81 @@
+Qt Desginer :
+
+- Important - QtDesigner is puer QT
+	- It doesnt know anything about python
+	- it does allow you to visually design your interface
+	- it also allows you to connect pre-defined signals to pre-defined slots
+	- custom slots must be written and connected after-the-fact in python
+	- saves the UI as an XML file that must be converted to python
+
+- workflow
+	1) Design interface
+	2) connect signals to slots (pre-defined slots only)
+	3) save
+	4) "compile" to python
+	5) write custom slots in python
+	6) test
+	7) modify interface
+
+Pyuic5:
+
+- command line utility
+- converts .ui file to python
+	- .ui file is XML file saved from
+	- pyuic fileui.ui to file.py
+- can be made executable with -x flag
+	- pyuic -x fileui.ui to file.py
+
+- Decoupling GUI from code
+	- turn ui files into non-executable modules that can be implemented to your primary python
+		- adv - doesnt need to be compiled at run-time
+		- disadv - have to recomiple with pyuic after every change	
+		- from ui_moduler.Gbx_demo_ui import *
+			class DlgMain(QDialog, Ui_DlgMain):
+				def __init__(self):
+					super(DlgMain, self).__init__()
+					self.setUi(self)
+		- use python module uic to read the ui file directly
+			- adv - dont need to deal with pyuic
+			- disadv - has to be compiled from ui everytime the program is run  
+			- disadv - code completion doesnt work
+				from PyQt5 import uic
+				class DlgMain(QDialog):
+					def __init__(self):
+						super().__init__()
+						uic.loadUi("ui7Gbx_demo.ui",self) 
+
+QMenu :
+
+- only available with QMainWindow
+- can be created manually but much easier in QtDesigner
+- can be nested several levels deep
+- every menu items is a QAction
+	- similar to a QPushButton but the same QAction can be triggered with a menu shortcut or toolbar icon
+	- QActions emit a triggered signal when triggered
+
+QToolbar:
+
+- Also only available in QMainWindow
+- can be dockable
+- toolbar is composed of QActions
+
+QstatusBar: 
+
+- also only available in QMainWindow
+- provides feedback to user
+- methods :
+	- showMessage(text, msec)
+	- clearMessage()
+	- addWidget(QWidget)
+	- addPermanentWidget(QWidget)
+
+QSplitter :
+
+- container that is user adjustable
+- methods
+	- addWidget(QWidget)
+	- insertWidget(idx, Qwidget)
+	- setOrientation(Qt.orientation)
+	- setHandleWidth(int)
+- signals
+	- splitterMoved(pos, idx)
